@@ -22,13 +22,17 @@
  * $Id$
  *
  * $Log$
- * Revision 1.1  2000-12-03 18:58:41  id
+ * Revision 1.2  2000-12-03 22:18:20  id
+ * initiate
+ *
+ * Revision 1.1  2000/12/03 18:58:41  id
  * initiate plugins branch
  *
  * Revision 1.1.1.1  1999/02/21 17:16:47  gloth
  * initial revision
  *
  */
+#include "config.h"
 
 #ifndef _GENERIC_H
 #define _GENERIC_H
