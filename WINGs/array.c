@@ -230,6 +230,8 @@ WMGetFromArray(WMArray *array, int index)
 void*
 WMPopFromArray(WMArray *array)
 {
+    wassertr(array->itemCount > 0);
+
     array->itemCount--;
 
     return array->items[array->itemCount];
