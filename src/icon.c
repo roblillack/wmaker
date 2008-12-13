@@ -891,6 +891,7 @@ miniwindowMouseDown(WObjDescriptor *desc, XEvent *event)
     int dx=event->xbutton.x, dy=event->xbutton.y;
     int grabbed=0;
     int clickButton=event->xbutton.button;
+    Bool hasMoved = False;
 
     if (WCHECK_STATE(WSTATE_MODAL))
         return;
@@ -942,6 +943,7 @@ miniwindowMouseDown(WObjDescriptor *desc, XEvent *event)
             break;
 
         case MotionNotify:
+            hasMoved = True;
             if (!grabbed) {
                 if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
                     || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
@@ -979,6 +981,8 @@ miniwindowMouseDown(WObjDescriptor *desc, XEvent *event)
 
             if (wPreferences.auto_arrange_icons)
                 wArrangeIcons(wwin->screen_ptr, True);
+            if (wPreferences.single_click && !hasMoved)
+                miniwindowDblClick(desc, event);
             return;
 
         }

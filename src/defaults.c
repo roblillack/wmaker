@@ -553,6 +553,9 @@ WDefaultEntry optionList[] = {
     {"DisableBlinking",	"NO",		NULL,
     &wPreferences.dont_blink,	getBool,	NULL
     },
+    {"SingleClickLaunch",	"NO",	NULL,
+    &wPreferences.single_click,	getBool,	NULL
+    },
     /* style options */
     {"MenuStyle", 	"normal",  		seMenuStyles,
     &wPreferences.menu_style, getEnum, 	setMenuStyle

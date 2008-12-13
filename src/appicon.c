@@ -590,6 +590,7 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
     Bool movingSingle = False;
     int oldX = x;
     int oldY = y;
+    Bool hasMoved = False;
 
     if (aicon->editing || WCHECK_STATE(WSTATE_MODAL))
         return;
@@ -665,6 +666,7 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
             break;
 
         case MotionNotify:
+            hasMoved = True;
             if (!grabbed) {
                 if (abs(dx-ev.xmotion.x)>=MOVE_THRESHOLD
                     || abs(dy-ev.xmotion.y)>=MOVE_THRESHOLD) {
@@ -801,6 +803,9 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
 
             if (wPreferences.auto_arrange_icons)
                 wArrangeIcons(scr, True);
+
+            if (wPreferences.single_click && !hasMoved)
+                iconDblClick(desc, event);
 
             done = 1;
             break;

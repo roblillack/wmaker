@@ -3758,7 +3758,7 @@ handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 
 
 
-static void
+static Bool
 handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 {
     WScreen *scr = dock->screen_ptr;
@@ -3776,6 +3776,7 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
     Bool docked;
     int superfluous = wPreferences.superfluous; /* we catch it to avoid problems */
     int omnipresent = aicon->omnipresent; /* this must be cached!!! */
+    Bool hasMoved = False;
 
 
     if (wPreferences.flags.noupdates)
@@ -3828,6 +3829,7 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
             break;
 
         case MotionNotify:
+            hasMoved = True;
             if (!grabbed) {
                 if (abs(ofs_x-ev.xmotion.x)>=MOVE_THRESHOLD
                     || abs(ofs_y-ev.xmotion.y)>=MOVE_THRESHOLD) {
@@ -3977,9 +3979,11 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 #ifdef DEBUG
             puts("End icon move");
 #endif
-            return;
+            return hasMoved;
         }
     }
+
+    return False;  /* never reached */
 }
 
 
@@ -4116,8 +4120,11 @@ iconMouseDown(WObjDescriptor *desc, XEvent *event)
                 handleClipChangeWorkspace(scr, event);
             else
                 handleDockMove(dock, aicon, event);
-        } else
-            handleIconMove(dock, aicon, event);
+        } else {
+            Bool hasMoved = handleIconMove(dock, aicon, event);
+            if (wPreferences.single_click && !hasMoved)
+                iconDblClick(desc, event);
+        }
 
     } else if (event->xbutton.button==Button2 && dock->type==WM_CLIP &&
                aicon==scr->clip_icon) {
