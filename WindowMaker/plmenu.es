@@ -7,7 +7,7 @@
   ("Lista de Procesos", EXEC, "xterm -e top"),
   ("Paginas del Manual", EXEC, "xman")
   ),
- ("Ejecutar...", SHEXEC, "%a(Run,Type command to run:)"),
+ ("Ejecutar...", SHEXEC, "%A(Run,Type command to run:)"),
  ("XTerm", EXEC, "xterm -sb"),
  ("Rxvt", EXEC, "rxvt -bg black -fg white -fn fixed"),
  ("Espacio de Trabajo", WORKSPACE_MENU),

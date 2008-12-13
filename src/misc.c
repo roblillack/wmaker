@@ -607,96 +607,59 @@ getselection(WScreen *scr)
 
 
 static char*
-getuserinput(WScreen *scr, char *line, int *ptr)
+parseuserinputpart(char *line, int *ptr, char *endchars)
 {
-    char *ret;
-    char *title;
-    char *prompt;
-    int j, state;
-    int begin = 0;
-#define BUFSIZE 512
-    char tbuffer[BUFSIZE], pbuffer[BUFSIZE];
+	int depth = 0, begin;
+	char *value = NULL;
+	begin = ++*ptr;
 
+	while(line[*ptr] != '\0') {
+		if(line[*ptr] == '(') {
+			++depth;
+		} else if(depth > 0 && line[*ptr] == ')') {
+			--depth;
+		} else if(depth == 0 && strchr(endchars, line[*ptr]) != NULL) {
+			value = wmalloc(*ptr - begin + 1);
+			strncpy(value, line + begin, *ptr - begin);
+			value[*ptr - begin] = '\0';
+			break;
+		}
+		++*ptr;
+	}
 
-    title = _("Program Arguments");
-    prompt = _("Enter command arguments:");
-    ret = NULL;
-
-#define _STARTING 0
-#define _TITLE 1
-#define _PROMPT 2
-#define _DONE 3
-
-    state = _STARTING;
-    j = 0;
-    for (; line[*ptr]!=0 && state!=_DONE; (*ptr)++) {
-        switch (state) {
-        case _STARTING:
-            if (line[*ptr]=='(') {
-                state = _TITLE;
-                begin = *ptr+1;
-            } else {
-                state = _DONE;
-            }
-            break;
-
-        case _TITLE:
-            if (j <= 0 && line[*ptr]==',') {
-
-                j = 0;
-                if (*ptr > begin) {
-                    strncpy(tbuffer, &line[begin], WMIN(*ptr-begin, BUFSIZE));
-                    tbuffer[WMIN(*ptr-begin, BUFSIZE)] = 0;
-                    title = (char*)tbuffer;
-                }
-                begin = *ptr+1;
-                state = _PROMPT;
-
-            } else if (j <= 0 && line[*ptr]==')') {
-
-                if (*ptr > begin) {
-                    strncpy(tbuffer, &line[begin], WMIN(*ptr-begin, BUFSIZE));
-                    tbuffer[WMIN(*ptr-begin, BUFSIZE)] = 0;
-                    title = (char*)tbuffer;
-                }
-                state = _DONE;
-
-            } else if (line[*ptr]=='(') {
-                j++;
-            } else if (line[*ptr]==')') {
-                j--;
-            }
-
-            break;
-
-        case _PROMPT:
-            if (line[*ptr]==')' && j==0) {
-
-                if (*ptr-begin > 1) {
-                    strncpy(pbuffer, &line[begin], WMIN(*ptr-begin, BUFSIZE));
-                    pbuffer[WMIN(*ptr-begin, BUFSIZE)] = 0;
-                    prompt = (char*)pbuffer;
-                }
-                state = _DONE;
-            } else if (line[*ptr]=='(')
-                j++;
-            else if (line[*ptr]==')')
-                j--;
-            break;
-        }
-    }
-    (*ptr)--;
-#undef _STARTING
-#undef _TITLE
-#undef _PROMPT
-#undef _DONE
-
-    if (!wInputDialog(scr, title, prompt, &ret))
-        return NULL;
-    else
-        return ret;
+	return value;
 }
 
+static char*
+getuserinput(WScreen *scr, char *line, int *ptr, Bool advanced)
+{
+    char *ret = NULL, *title = NULL, *prompt = NULL, *name = NULL;
+    int rv;
+
+    if(line[*ptr] == '(')
+	title = parseuserinputpart(line, ptr, ",)");
+    if(title != NULL && line[*ptr] == ',')
+	prompt = parseuserinputpart(line, ptr, ",)");
+    if(prompt != NULL && line[*ptr] == ',')
+	name = parseuserinputpart(line, ptr, ")");
+
+    if(advanced)
+        rv = wAdvancedInputDialog(scr,
+		title ? gettext(title):_("Program Arguments"),
+		prompt ? gettext(prompt):_("Enter command arguments:"),
+		name, &ret);
+    else
+        rv = wInputDialog(scr,
+		title ? gettext(title):_("Program Arguments"),
+		prompt ? gettext(prompt):_("Enter command arguments:"),
+		&ret);
+
+    if(title) wfree(title);
+    if(prompt) wfree(prompt);
+    if(name) wfree(name);
+
+    return rv ? ret : NULL;
+}
 
 #define S_NORMAL 0
 #define S_ESCAPE 1
@@ -814,8 +777,9 @@ ExpandOptions(WScreen *scr, char *cmdline)
                 break;
 
             case 'a':
+            case 'A':
                 ptr++;
-                user_input = getuserinput(scr, cmdline, &ptr);
+                user_input = getuserinput(scr, cmdline, &ptr, cmdline[ptr-1] == 'A');
                 if (user_input) {
                     slen = strlen(user_input);
                     olen += slen;

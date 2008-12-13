@@ -7,7 +7,7 @@
   ("プロセス一覧", EXEC, "xterm -e top"),
   ("マニュアルブラウザ", EXEC, "xman")
   ),
- ("コマンド実行", SHEXEC, "%a(Run,Type command to run:)"),
+ ("コマンド実行", SHEXEC, "%A(Run,Type command to run:)"),
  ("KTerm", EXEC, "kterm -sb"),
  ("Rxvt", EXEC, "rxvt -bg black -fg white"),
  ("ワークスペース", WORKSPACE_MENU),

@@ -475,6 +475,8 @@ typedef struct WPreferences {
     RImage *swtileImage;
     RImage *swbackImage[9];
 
+    int history_lines;
+ 
     struct {
         unsigned int nodock:1;	       /* don't display the dock */
         unsigned int noclip:1;         /* don't display the clip */

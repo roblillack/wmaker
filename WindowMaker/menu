@@ -116,7 +116,7 @@
 		"Process List" EXEC xterm -e top
 		"Manual Browser" EXEC xman
 	"Info" END
-	"Run..." SHEXEC %a(Run,Type command to run:)
+	"Run..." SHEXEC %A(Run,Type command to run:)
 	"XTerm" EXEC xterm -sb 
 	"Mozilla Firefox" EXEC firefox
 	"Workspaces" WORKSPACE_MENU

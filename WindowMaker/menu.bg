@@ -120,7 +120,7 @@
 		"Списък процеси" EXEC xterm -e top
 		"Ръководства" EXEC xman
 	"Инфо" END
-	"Стартирай..." SHEXEC %a(Run,Въведете команда, която да се стартира:)
+	"Стартирай..." SHEXEC %A(Run,Въведете команда, която да се стартира:)
 	"XTerm" EXEC xterm -sb 
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
 	"Работни места" WORKSPACE_MENU
