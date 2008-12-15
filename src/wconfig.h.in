@@ -489,6 +489,7 @@
 
 #define WM_PI 3.14159265358979323846
 
+#define MAX_SHORTCUT_LENGTH 32
 #define FRAME_BORDER_WIDTH 1	       /* width of window border for frames */
 
 #define RESIZEBAR_HEIGHT 8	       /* height of the resizebar */
