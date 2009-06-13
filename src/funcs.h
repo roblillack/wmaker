@@ -118,12 +118,14 @@ char *ShrinkString(WMFont *font, char *string, int width);
 
 char *FindImage(char *paths, char *file);
 
-RImage*wGetImageForWindowName(WScreen *scr, char *winstance, char *wclass);
+RImage *wGetImageForWindowName(WScreen *scr, char *winstance, char *wclass);
 
 void ParseWindowName(WMPropList *value, char **winstance, char **wclass,
                      char *where);
 
 void SendHelperMessage(WScreen *scr, char type, int workspace, char *msg);
+
+char *KeyToShortcut(KeyCode keycode, int modifier);
 
 char *GetShortcutString(char *text);
 

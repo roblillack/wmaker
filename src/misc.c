@@ -49,7 +49,6 @@
 #include "xutil.h"
 #include "xmodifier.h"
 
-
 /**** global variables *****/
 
 extern WPreferences wPreferences;
@@ -912,6 +911,47 @@ keysymToString(KeySym keysym, unsigned int state)
 }
 #endif
 
+
+char*
+KeyToShortcut(KeyCode keycode, int modifier) {
+    KeySym ksym, lksym, uksym;
+    char buffer[64];
+    char *key = NULL;
+
+    ksym = XKeycodeToKeysym(dpy, keycode, 0);
+    XConvertCase(ksym, &lksym, &uksym);
+    key = XKeysymToString(uksym);
+
+    if (!key)
+        return NULL;
+
+    buffer[0] = 0;
+
+    if (modifier & ControlMask) {
+        strcat(buffer, "^");
+    }
+    if (modifier & ShiftMask) {
+        strcat(buffer, "\342\207\247"); // ⇧ U+21E7 UPWARDS WHITE ARROW
+    }
+    if (modifier & Mod1Mask) {
+        strcat(buffer, "\342\214\245"); // ⌥ U+2325 OPTION KEY
+    }
+    if (modifier & Mod2Mask) {
+        strcat(buffer, "\342\231\246"); // ♦ U+2666 BLACK DIAMOND SUIT
+    }
+    if (modifier & Mod3Mask) {
+        strcat(buffer, "Mod3+");
+    }
+    if (modifier & Mod4Mask) {
+        strcat(buffer, "\342\214\230"); // ⌘ U+2318 PLACE OF INTEREST SIGN
+    }
+    if (modifier & Mod5Mask) {
+        strcat(buffer, "Mod5+");
+    }
+    strcat(buffer, key);
+
+    return wstrdup(buffer);
+}
 
 char*
 GetShortcutString(char *text)
