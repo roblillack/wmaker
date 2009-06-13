@@ -280,23 +280,23 @@ const char *wXModifierToShortcutLabel(int mask)
 		return NULL;
 
 	if (mask == ShiftMask)
-		return "Sh+";
+		return "\342\207\247"; // ⇧ U+21E7 UPWARDS WHITE ARROW
 	if (mask ==  ControlMask)
 		return "^";
 	if (mask ==  AltMask)
-		return "A+";
+		return "\342\214\245"; // ⌥ U+2325 OPTION KEY
 	if (mask ==  Mod1Mask)
-		return "M1+";
+		return "\342\214\245"; // ⌥ U+2325 OPTION KEY
 	if (mask ==  Mod2Mask)
 		return "M2+";
 	if (mask ==  Mod3Mask)
 		return "M3+";
 	if (mask ==  Mod4Mask)
-		return "M4+";
+		return "\342\214\230"; // ⌘ U+2318 PLACE OF INTEREST SIGN
 	if (mask ==  Mod5Mask)
 		return "M5+";
 	if (mask ==  MetaMask)
-		return "M+";
+		return "\342\231\246"; // ♦ U+2666 BLACK DIAMOND SUIT
 
 	wwarning(_("Can't convert keymask 0x%04X to a shortcut label"), mask);
 	return NULL;
