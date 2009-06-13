@@ -938,19 +938,19 @@ GetShortcutString(char *text)
         modmask |= mod;
 
         if (strcasecmp(text, "Meta")==0) {
-            buffer = wstrappend(buffer, "M+");
+            buffer = wstrappend(buffer, "\342\231\246"); // ♦ U+2666 BLACK DIAMOND SUIT
         } else if (strcasecmp(text, "Alt")==0) {
-            buffer = wstrappend(buffer, "A+");
+            buffer = wstrappend(buffer, "\342\214\245"); // ⌥ U+2325 OPTION KEY
         } else if (strcasecmp(text, "Shift")==0) {
-            buffer = wstrappend(buffer, "Sh+");
+            buffer = wstrappend(buffer, "\342\207\247"); // ⇧ U+21E7 UPWARDS WHITE ARROW
         } else if (strcasecmp(text, "Mod1")==0) {
-            buffer = wstrappend(buffer, "M1+");
+            buffer = wstrappend(buffer, "\342\214\245"); // ⌥ U+2325 OPTION KEY
         } else if (strcasecmp(text, "Mod2")==0) {
             buffer = wstrappend(buffer, "M2+");
         } else if (strcasecmp(text, "Mod3")==0) {
             buffer = wstrappend(buffer, "M3+");
         } else if (strcasecmp(text, "Mod4")==0) {
-            buffer = wstrappend(buffer, "M4+");
+            buffer = wstrappend(buffer, "\342\214\230"); // ⌘ U+2318 PLACE OF INTEREST SIGN
         } else if (strcasecmp(text, "Mod5")==0) {
             buffer = wstrappend(buffer, "M5+");
         } else if (strcasecmp(text, "Control")==0) {
