@@ -297,7 +297,7 @@
 #define PLACETEST_HSTEP	        8
 #define PLACETEST_VSTEP	        8
 
-#define DOCK_EXTRA_SPACE	0
+#define DOCK_EXTRA_SPACE	3
 
 /* Vicinity in which an icon can be attached to the clip */
 #define CLIP_ATTACH_VICINITY	1
