@@ -245,7 +245,7 @@ WMColor *WMGrayColor(WMScreen * scr)
 			WMReleaseColor(white);
 			WMReleaseColor(black);
 		} else {
-			color = WMCreateRGBColor(scr, 0xaeba, 0xaaaa, 0xaeba, True);
+			color = WMCreateRGBColor(scr, 0xaaaa, 0xaaaa, 0xaaaa, True);
 			if (!color->flags.exact)
 				wwarning(_("could not allocate %s color"), _("gray"));
 		}
