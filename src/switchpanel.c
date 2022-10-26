@@ -199,7 +199,7 @@ static void addIconForWindow(WSwitchPanel *panel, WMWidget *parent, WWindow *wwi
 		image = get_icon_image(panel->scr, wwin->wm_instance, wwin->wm_class, icon_tile_size);
 
 	/* We must resize the icon size (~64) to the switch panel icon size (~48) */
-	image = wIconValidateIconSize(image, icon_size);
+	image = wIconValidateIconSize(image, icon_size, False);
 
 	WMAddToArray(panel->images, image);
 	WMAddToArray(panel->icons, icon);

@@ -336,22 +336,39 @@ void wIconChangeTitle(WIcon *icon, WWindow *wwin)
 			icon->icon_name = wNETWMGetWindowName(wwin->client_win);
 }
 
-RImage *wIconValidateIconSize(RImage *icon, int max_size)
+RImage *wIconValidateIconSize(RImage *icon, int max_size, Bool scale_down)
 {
 	RImage *nimage;
 
 	if (!icon)
 		return NULL;
 
-	/* We should hold "ICON_BORDER" (~2) pixels to include the icon border */
-	if (((max_size + ICON_BORDER) < icon->width) ||
-	    ((max_size + ICON_BORDER) < icon->height)) {
+	int wanted = max_size;
+
+	if (scale_down) {
+		/* For some image sources, we want to ensure that the icon is fitting */
+
+		if (wPreferences.enforce_icon_margin) {
+			/* better use only 75% of icon_size. For 64x64 this means 48x48
+			* This leaves room around the icon for the miniwindow title and
+			* results in better overall aesthetics -Dan */
+			wanted = (int)((double)wPreferences.icon_size * 0.75 + 0.5);
+
+			/* the size should be a multiple of 4 */
+			wanted = (wanted >> 2) << 2;
+		} else {
+
+			/* This is the "old" approach, which just adds a 3px border */
+			wanted = (max_size - ICON_BORDER);
+		}
+	}
+
+	if (icon->width > wanted || icon->height > wanted) {
 		if (icon->width > icon->height)
-			nimage = RScaleImage(icon, max_size - ICON_BORDER,
-					     (icon->height * (max_size - ICON_BORDER) / icon->width));
+			nimage = RScaleImage(icon, wanted, icon->height * wanted / icon->width);
 		else
-			nimage = RScaleImage(icon, (icon->width * (max_size - ICON_BORDER) / icon->height),
-					     max_size - ICON_BORDER);
+			nimage = RScaleImage(icon, icon->width * wanted / icon->height, wanted);
+
 		RReleaseImage(icon);
 		icon = nimage;
 	}
@@ -794,7 +811,7 @@ RImage *get_rimage_icon_from_wm_hints(WIcon *icon)
 		return NULL;
 
 	/* Resize the icon to the wPreferences.icon_size size */
-	image = wIconValidateIconSize(image, wPreferences.icon_size);
+	image = wIconValidateIconSize(image, wPreferences.icon_size, True);
 
 	return image;
 }

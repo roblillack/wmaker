@@ -435,7 +435,7 @@ RImage *get_rimage_from_file(WScreen *scr, const char *file_name, int max_size)
 		wwarning(_("error loading image file \"%s\": %s"), file_name,
 			 RMessageForError(RErrorCode));
 
-	image = wIconValidateIconSize(image, max_size);
+	image = wIconValidateIconSize(image, max_size, False);
 
 	return image;
 }
@@ -472,7 +472,7 @@ RImage *get_default_image(WScreen *scr)
 
 	/* Resize the icon to the wPreferences.icon_size size
 	 * usually this function will return early, because size is right */
-	image = wIconValidateIconSize(image, wPreferences.icon_size);
+	image = wIconValidateIconSize(image, wPreferences.icon_size, False);
 
 	return image;
 }
