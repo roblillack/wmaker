@@ -363,7 +363,7 @@ RImage *wIconValidateIconSize(RImage *icon, int max_size, Bool scale_down)
 		}
 	}
 
-	if (icon->width >wanted || icon->height > wanted) {
+	if (icon->width > wanted || icon->height > wanted) {
 		if (icon->width > icon->height)
 			nimage = RScaleImage(icon, wanted, icon->height * wanted / icon->width);
 		else
