@@ -536,7 +536,7 @@ RImage *get_window_image_from_x11(Window window)
 		return NULL;
 
 	/* Resize the image to the correct value */
-	image = wIconValidateIconSize(image, wPreferences.icon_size);
+	image = wIconValidateIconSize(image, wPreferences.icon_size, False);
 
 	return image;
 }
